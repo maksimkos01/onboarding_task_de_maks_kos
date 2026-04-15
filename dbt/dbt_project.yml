@@ -1,0 +1,25 @@
+# dbt/dbt_project.yml
+name: 'onboarding_dbt'
+version: '1.0.0'
+config-version: 2
+
+profile: 'onboarding_dbt'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+test-paths: ["tests"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  onboarding_dbt:
+    +materialized: table
+    silver:
+      +dataset: mk_silver
+    gold:
+      +dataset: mk_gold

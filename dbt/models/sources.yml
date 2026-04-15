@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: bronze_layer
+    project: syntio-onboarding-prod
+    dataset: mk_bronze
+    tables:
+      - name: br_sales  
+      - name: us_sales  
+      - name: products  
+      - name: stores

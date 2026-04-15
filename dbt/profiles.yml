@@ -1,0 +1,13 @@
+# dbt/profiles.yml
+onboarding_dbt:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: syntio-onboarding-prod  
+      dataset: mk_silver             
+      threads: 4
+      keyfile: dbt-key.json
+      location: europe-west1         
+      priority: interactive
