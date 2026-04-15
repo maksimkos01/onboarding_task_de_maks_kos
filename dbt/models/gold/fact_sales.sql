@@ -1,9 +1,25 @@
+{{ config(
+    materialized='incremental',
+    unique_key='sale_id',
+    partition_by={
+      "field": "sale_date",
+      "data_type": "date",
+      "granularity": "day"
+    }
+) }}
+
 WITH br_sales AS (
     SELECT * FROM {{ ref('stg_br_sales') }}
+    {% if is_incremental() %}
+    WHERE DATETIME(CAST(transaction_at AS TIMESTAMP), 'UTC') >= (SELECT coalesce(MAX(sale_ts), DATETIME('2020-01-01')) FROM {{ this }})
+    {% endif %}
 ),
 
 us_sales AS (
     SELECT * FROM {{ ref('stg_us_sales') }}
+    {% if is_incremental() %}
+    WHERE DATETIME(CAST(transaction_at AS TIMESTAMP), 'UTC') >= (SELECT coalesce(MAX(sale_ts), DATETIME('2020-01-01')) FROM {{ this }})
+    {% endif %}
 ),
 
 
