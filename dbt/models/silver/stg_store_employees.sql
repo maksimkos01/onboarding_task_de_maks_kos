@@ -7,6 +7,7 @@ WITH source AS (
 )
 
 SELECT
+    {{ dbt_utils.generate_surrogate_key(['emp.EmployeeID', 'store_id']) }} AS employee_key,
     store_id,
     country_code,
     emp.EmployeeID AS employee_id,

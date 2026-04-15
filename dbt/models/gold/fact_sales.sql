@@ -81,23 +81,23 @@ combined_sales AS (
 ),
 
 customer AS (
-    SELECT customer_id, src_customer_id
+    SELECT customer_id, src_customer_id, valid_from, valid_to
     FROM {{ ref('dim_customers') }}
 ),
 
 product AS (
-    SELECT model_id, src_model_id
+    SELECT model_id, model_id_us, model_id_br, valid_from, valid_to
     FROM {{ ref('dim_products') }}
 ),
 
 store AS (
-    SELECT store_id, src_store_id
+    SELECT store_id, src_store_id, valid_from, valid_to
     FROM {{ ref('dim_stores') }}
 ),
 
 employee AS (
     SELECT 
-        employee_id, src_employee_id
+        employee_id, src_employee_id, valid_from, valid_to
     FROM {{ ref('dim_employee') }}
 ),
 
@@ -125,11 +125,22 @@ SELECT
 FROM combined_sales cs
 LEFT JOIN customer c 
     ON CAST(cs.src_customer_id AS STRING) = CAST(c.src_customer_id AS STRING)
+    AND CAST(cs.transaction_at AS TIMESTAMP) >= c.valid_from
+    AND (c.valid_to IS NULL OR cs.transaction_at < c.valid_to)
 LEFT JOIN product p 
-    ON CAST(cs.src_model_id AS STRING) = CAST(p.src_model_id AS STRING)
+    ON (
+        CAST(cs.src_model_id AS STRING) = CAST(p.model_id_br AS STRING)
+        OR CAST(cs.src_model_id AS STRING) = CAST(p.model_id_us AS STRING)
+    )
+    AND CAST(cs.transaction_at AS TIMESTAMP) >= p.valid_from
+    AND (p.valid_to IS NULL OR cs.transaction_at < p.valid_to)
 LEFT JOIN store s 
     ON CAST(cs.src_store_id AS STRING) = CAST(s.src_store_id AS STRING)
+    AND CAST(cs.transaction_at AS TIMESTAMP) >= s.valid_from
+    AND (s.valid_to IS NULL OR cs.transaction_at < s.valid_to)
 LEFT JOIN employee e 
     ON CAST(cs.src_employee_id AS STRING) = CAST(e.src_employee_id AS STRING)
+    AND CAST(cs.transaction_at AS TIMESTAMP) >= e.valid_from
+    AND (e.valid_to IS NULL OR cs.transaction_at < e.valid_to)
 LEFT JOIN date_dim d 
     ON DATE(CAST(cs.transaction_at AS TIMESTAMP)) = d.date_day

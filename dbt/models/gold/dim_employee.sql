@@ -1,16 +1,19 @@
-
-WITH silver_employees AS (
-    SELECT * FROM {{ ref('stg_store_employees') }}
+WITH snapshot_employees AS (
+    SELECT * FROM {{ ref('snp_dim_employee') }}
 )
 
 SELECT
-    {{ dbt_utils.generate_surrogate_key(['employee_id']) }} AS employee_id,
-    CAST(employee_id AS STRING) AS src_employee_id,
+    {{ dbt_utils.generate_surrogate_key(['src_employee_id', 'dbt_valid_from']) }} AS employee_id,
+    src_employee_id,
     first_name,
     last_name,
     phone_number,
-    job_position AS position,
+    position,
     hired_on,
-    employee_address AS address,
-    country_code
-FROM silver_employees
+    address,
+    country_code,
+    dbt_valid_from AS valid_from,
+    dbt_valid_to AS valid_to,
+    CASE WHEN dbt_valid_to IS NULL THEN TRUE ELSE FALSE END AS is_current
+
+FROM snapshot_employees
