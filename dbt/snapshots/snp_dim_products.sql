@@ -3,7 +3,7 @@
 {{
     config(
       target_schema='mk_gold', 
-      unique_key='model_id_us',    
+      unique_key='model_key',    
       strategy='check',
       check_cols='all'
     )

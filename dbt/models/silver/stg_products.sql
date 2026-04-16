@@ -3,6 +3,7 @@ WITH source AS (
 )
 
 SELECT
+    {{ dbt_utils.generate_surrogate_key(['USModelID', 'BRModelID', 'Year']) }} AS model_key,
     Model AS model,
     Make AS make,
     Category AS category,
