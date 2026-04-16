@@ -3,7 +3,7 @@ WITH snapshot_products AS (
 )
 
 SELECT
-    {{ dbt_utils.generate_surrogate_key(['model_id_us', 'dbt_valid_from']) }} AS model_id,
+    {{ dbt_utils.generate_surrogate_key(['model_key', 'dbt_valid_from']) }} AS model_id,
     model,
     make,
     category,

@@ -3,7 +3,7 @@ WITH snapshot_employees AS (
 )
 
 SELECT
-    {{ dbt_utils.generate_surrogate_key(['src_employee_id', 'dbt_valid_from']) }} AS employee_id,
+    {{ dbt_utils.generate_surrogate_key(['employee_key', 'dbt_valid_from']) }} AS employee_id,
     src_employee_id,
     first_name,
     last_name,

@@ -109,7 +109,7 @@ date_dim AS (
 )
 
 SELECT
-    {{ dbt_utils.generate_surrogate_key(['cs.src_sale_id']) }} AS sale_id,
+    {{ dbt_utils.generate_surrogate_key(['cs.src_sale_id','p.model_id','c.customer_id']) }} AS sale_id,
     cs.src_sale_id,
     c.customer_id,
     p.model_id,
