@@ -4,7 +4,7 @@ export REGION="europe-west1"
 export SERVICE_ACCOUNT_EMAIL="dbt-mk-user@syntio-onboarding-prod.iam.gserviceaccount.com"
 export IMAGE_TAG="europe-west1-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/dbt-onboarding:v1"
 
-docker build -t $IMAGE_TAG .
+docker build --platform linux/amd64 -t $IMAGE_TAG .
 
 docker push $IMAGE_TAG
 
@@ -14,4 +14,4 @@ gcloud run jobs create dbt-medallion-job \
     --service-account $SERVICE_ACCOUNT_EMAIL
 
 # to execute the job:
-# gcloud run jobs execute dbt-medallion-job
+gcloud run jobs execute dbt-medallion-job --region $REGION --project $PROJECT_ID
