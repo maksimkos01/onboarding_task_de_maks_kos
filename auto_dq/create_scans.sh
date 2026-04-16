@@ -1,7 +1,6 @@
 export LOCATION="europe-west1"
 export PROJECT_ID="syntio-onboarding-prod"
 export DATASET_ID="mk_gold"
-export SERVICE_ACCOUNT="dbt-mk-user@syntio-onboarding-prod.iam.gserviceaccount.com"
 export DATA_SOURCE_BASE="//bigquery.googleapis.com/projects/$PROJECT_ID/datasets/$DATASET_ID/tables"
 
 # Create the data quality scans
