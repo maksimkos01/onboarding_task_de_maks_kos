@@ -1,0 +1,8 @@
+rules:
+  - column: model_id
+    dimension: UNIQUENESS
+    uniquenessExpectation: {}
+  - column: price
+    dimension: VALIDITY
+    rangeExpectation:
+      minValue: "0"

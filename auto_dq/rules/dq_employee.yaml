@@ -1,0 +1,4 @@
+rules:
+  - column: employee_id
+    dimension: UNIQUENESS
+    uniquenessExpectation: {}
