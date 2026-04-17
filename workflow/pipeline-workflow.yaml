@@ -1,0 +1,102 @@
+main:
+  steps:
+    - init_variables:
+        assign:
+          - project_id: "syntio-onboarding-prod"
+          - region: "europe-west1"
+          - ingestion_url: "https://mk-kafka-consumer-to-pubsub-1074671996056.europe-west1.run.app"
+          - dbt_job_name: "dbt-medallion-job"
+          - dq_scan_ids: ["mk-products-dq-scan", "mk-employee-dq-scan", "mk-stores-dq-scan"]
+
+    # Run Ingestion Services in Parallel
+    - parallel_ingestion:
+        parallel:
+          branches:
+            - us_branch:
+                steps:
+                  - ingest_us_sales:
+                      call: http.post
+                      args:
+                        url: ${ingestion_url + "/consume/us"}
+                        auth:
+                          type: OIDC
+                      result: us_res
+                  - check_us_status:
+                      switch:
+                        - condition: ${us_res.code != 200}
+                          raise: ${"US Ingestion failed with status " + string(us_res.code)}
+            - br_branch:
+                steps:
+                  - ingest_br_sales:
+                      call: http.post
+                      args:
+                        url: ${ingestion_url + "/consume/br"}
+                        auth:
+                          type: OIDC
+                      result: br_res
+                  - check_br_status:
+                      switch:
+                        - condition: ${br_res.code != 200}
+                          raise: ${"BR Ingestion failed with status " + string(br_res.code)}
+
+    # 2. Wait for BigQuery Subscription to process Pub/Sub messages
+    - wait_for_ingestion_sync:
+        call: sys.sleep
+        args:
+          seconds: 30
+
+    # 3. Trigger dbt Transformation Job
+    - run_dbt_transformation:
+        call: googleapis.run.v2.projects.locations.jobs.run
+        args:
+          name: ${"projects/" + project_id + "/locations/" + region + "/jobs/" + dbt_job_name}
+        result: dbt_job_execution
+
+    # 4. Poll dbt status until completion
+    - wait_for_job:
+        steps:
+          - check_job_done:
+              call: googleapis.run.v2.projects.locations.operations.get
+              args:
+                name: ${dbt_job_execution.name}
+              result: operation
+          - is_done:
+              switch:
+                - condition: ${operation.done == true}
+                  next: check_job_error
+              next: sleep_before_retry
+          - sleep_before_retry:
+              call: sys.sleep
+              args:
+                seconds: 30
+              next: check_job_done
+          - check_job_error:
+              switch:
+                - condition: ${"error" in operation}
+                  next: fail_on_job_error
+              next: run_dataplex_scans
+
+    # 5. Run DQ Scans 
+    - run_dataplex_scans:
+            parallel:
+              for:
+                value: scan_id
+                in: ${dq_scan_ids}
+                steps:
+                  - trigger_scan:
+                      call: http.post
+                      args:
+                        url: ${"https://dataplex.googleapis.com/v1/projects/" + project_id + "/locations/" + region + "/dataScans/" + scan_id + ":run"}
+                        auth:
+                          type: OAuth2
+                      result: scan_result
+            next: completion_success
+      
+
+
+    # Error Handling for dbt Job
+    - fail_on_job_error:
+        raise: ${operation.error}
+
+    - completion_success:
+        return: "Pipeline completed: Ingestion, dbt, and DQ scans finished successfully."
