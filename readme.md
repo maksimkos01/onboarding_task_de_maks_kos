@@ -26,3 +26,6 @@ This directory contains a custom FastAPI Python application containerized via Do
 This directory contains the configuration and automation scripts for Google Cloud Dataplex AutoDQ. It provides automated data quality monitoring for the serving layer (Gold).
 * **`create_scans.sh`**: A shell script that automates the provisioning of Dataplex Data Quality scans.
 * **`rules/`**: A sub-directory containing table-specific YAML definitions for data quality expectations.
+
+### `terraform/`
+This directory contains the IaC
