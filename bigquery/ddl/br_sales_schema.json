@@ -1,0 +1,41 @@
+[
+  {
+    "name": "Cabecalho",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+      { "name": "TransacaoID", "type": "INTEGER", "mode": "NULLABLE" },
+      { "name": "Moeda", "type": "STRING", "mode": "NULLABLE" },
+      { "name": "TransacaoTempo", "type": "TIMESTAMP", "mode": "NULLABLE" },
+      { "name": "LojaID", "type": "STRING", "mode": "NULLABLE" },
+      {
+        "name": "Cliente",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+          { "name": "ClienteID", "type": "INTEGER", "mode": "NULLABLE" },
+          { "name": "ClienteNome", "type": "STRING", "mode": "NULLABLE" },
+          { "name": "Localizacao", "type": "STRING", "mode": "NULLABLE" }
+        ]
+      },
+      {
+        "name": "Cartao",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+          { "name": "Numero", "type": "STRING", "mode": "NULLABLE" },
+          { "name": "DataDeValidade", "type": "STRING", "mode": "NULLABLE" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Modelo",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+      { "name": "ModeloID", "type": "STRING", "mode": "NULLABLE" },
+      { "name": "Preco", "type": "NUMERIC", "mode": "NULLABLE" }
+    ]
+  }
+]

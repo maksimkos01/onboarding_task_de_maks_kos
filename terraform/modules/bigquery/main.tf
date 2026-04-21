@@ -31,24 +31,18 @@ resource "google_bigquery_table" "stores" {
 }
 
 # Execute DDL for US and BR Sales
-resource "google_bigquery_job" "create_us_sales" {
-  job_id   = "create_us_sales_job"
-  project  = var.project_id
-  location = var.region
-  query {
-    query          = file("../bigquery/ddl/create_us_sales.sql")
-    use_legacy_sql = false
-  }
-  depends_on = [google_bigquery_dataset.medallion]
+resource "google_bigquery_table" "us_sales" {
+  dataset_id = "mk_bronze"
+  table_id   = "us_sales"
+  project    = var.project_id
+  schema = file("../bigquery/schemas/us_sales_schema.json")
+
 }
 
-resource "google_bigquery_job" "create_br_sales" {
-  job_id   = "create_br_sales_job"
-  project  = var.project_id
-  location = var.region
-  query {
-    query          = file("../bigquery/ddl/create_br_sales.sql")
-    use_legacy_sql = false
-  }
-  depends_on = [google_bigquery_dataset.medallion]
+resource "google_bigquery_table" "br_sales" {
+  dataset_id = "mk_bronze"
+  table_id   = "br_sales"
+  project    = var.project_id
+  schema = file("../bigquery/schemas/br_sales_schema.json")
+
 }
