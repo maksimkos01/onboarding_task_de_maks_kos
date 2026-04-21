@@ -35,7 +35,7 @@ resource "google_bigquery_table" "us_sales" {
   dataset_id = "mk_bronze"
   table_id   = "us_sales"
   project    = var.project_id
-  schema = file("../bigquery/schemas/us_sales_schema.json")
+  schema = file("../bigquery/ddl/us_sales_schema.json")
 
 }
 
@@ -43,6 +43,6 @@ resource "google_bigquery_table" "br_sales" {
   dataset_id = "mk_bronze"
   table_id   = "br_sales"
   project    = var.project_id
-  schema = file("../bigquery/schemas/br_sales_schema.json")
+  schema = file("../bigquery/ddl/br_sales_schema.json")
 
 }
