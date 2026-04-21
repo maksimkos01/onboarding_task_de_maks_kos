@@ -1,0 +1,100 @@
+name: CI/CD Pipeline
+on: workflow_dispatch:
+
+env:
+  PROJECT_ID: ${{ vars.PROD_GCP_PROJECT_ID }}
+  WIF_PROVIDER: ${{ vars.PROD_GCP_WIF_PROVIDER }}
+  WIF_SA: ${{ vars.PROD_GCP_WIF_SA }}
+  REGION: ${{ vars.PROD_GCP_REGION }}
+
+jobs:
+  python-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Lint with Ruff
+        run: ruff check cloude_run_service/
+
+      - name: Test with Pytest
+        run: pytest cloude_run_service/
+
+  # 2. TERRAFORM
+  infrastructure:
+    needs: [python-ci]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ env.WIF_PROVIDER }}
+          service_account: ${{ env.WIF_SA }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Format & Validate
+        run: |
+          cd terraform/ 
+          terraform init -backend=false
+          terraform fmt -check
+          terraform validate
+          terraform apply -auto-approve
+
+  # 3. BUILD & PUSH ARTIFACTS
+  build-and-deploy:
+    needs: [infrastructure] # Infrastructure must exist first!
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ env.WIF_PROVIDER }}
+          service_account: ${{ env.WIF_SA }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Build & Push Ingestion Image
+        run: |
+          gcloud builds submit cloude_run_service/ \
+            --tag ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/onboarding-repo/ingestion-service:${{ github.sha }}
+
+      - name: Deploy Ingestion to Cloud Run
+        run: |
+          gcloud run deploy mk-consumer-service \
+            --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/onboarding-repo/ingestion-service:${{ github.sha }} \
+            --region ${{ env.REGION }} \
+            --platform managed
+
+      - name: Build & Push DBT Image
+        run: |
+          gcloud builds submit dbt/ \
+            --tag ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/onboarding-repo/dbt-job:${{ github.sha }}
+
+      - name: Update DBT Job Image
+        run: |
+          gcloud run jobs update mk-dbt-medallion-job \
+            --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/onboarding-repo/dbt-job:${{ github.sha }} \
+            --region ${{ env.REGION }}
