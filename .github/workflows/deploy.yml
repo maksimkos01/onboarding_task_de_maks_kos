@@ -29,6 +29,9 @@ jobs:
         run: ruff check cloude_run_service/
 
       - name: Test with Pytest
+        env:
+            GOOGLE_CLOUD_PROJECT: "mock-project"
+            KAFKA_BOOTSTRAP_SERVERS: "localhost:9092"
         run: pytest cloude_run_service/
 
   # 2. TERRAFORM

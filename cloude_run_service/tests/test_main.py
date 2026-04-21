@@ -1,11 +1,25 @@
 import pytest
 from unittest.mock import patch, MagicMock
 
-with patch("google.cloud.pubsub_v1.PublisherClient"):
+# --- CRITICAL: PATCH BEFORE IMPORTING APP ---
+with patch("google.cloud.pubsub_v1.PublisherClient"), \
+     patch("google.cloud.secretmanager.SecretManagerServiceClient"), \
+     patch("confluent_kafka.Consumer"):
+    
     from cloude_run_service.main import app
     from fastapi.testclient import TestClient
 
 client = TestClient(app)
+
+@pytest.fixture
+def mock_kafka_consumer():
+    with patch("cloude_run_service.main.Consumer") as mock:
+        yield mock
+
+@pytest.fixture
+def mock_pubsub_publisher():
+    with patch("cloude_run_service.main.publisher") as mock:
+        yield mock
 
 @pytest.fixture
 def mock_kafka_consumer():
