@@ -36,6 +36,7 @@ resource "google_bigquery_table" "us_sales" {
   table_id   = "us_sales"
   project    = var.project_id
   schema = file("../bigquery/ddl/us_sales_schema.json")
+  depends_on = [google_bigquery_dataset.medallion]
 
 }
 
@@ -44,5 +45,5 @@ resource "google_bigquery_table" "br_sales" {
   table_id   = "br_sales"
   project    = var.project_id
   schema = file("../bigquery/ddl/br_sales_schema.json")
-
+  depends_on = [google_bigquery_dataset.medallion]
 }
