@@ -1,3 +1,4 @@
+#!/bin/bash
 export LOCATION="europe-west1"
 export PROJECT_ID="syntio-onboarding-prod"
 export DATASET_ID="mk_gold"
@@ -24,6 +25,6 @@ gcloud dataplex datascans create data-quality mk-stores-dq-scan \
 
 
 # Run the scan 
-gcloud dataplex datascans run products-dq-scan --location="$LOCATION"
-gcloud dataplex datascans run employee-dq-scan --location="$LOCATION" 
-gcloud dataplex datascans run stores-dq-scan --location="$LOCATION" 
+#gcloud dataplex datascans run products-dq-scan --location="$LOCATION"
+#gcloud dataplex datascans run employee-dq-scan --location="$LOCATION" 
+#gcloud dataplex datascans run stores-dq-scan --location="$LOCATION" 

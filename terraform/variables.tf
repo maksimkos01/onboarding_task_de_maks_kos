@@ -44,11 +44,6 @@ variable "pubsub_topics" {
   description = "List of PubSub topics and dead-letter topics to create."
 }
 
-variable "auto_dq_tables" {
-  type        = list(string)
-  description = "List of gold tables for data quality checks"
-}
-
 variable "gs_products_path" {
   type        = string
   description = "GCS path for product CSV files."

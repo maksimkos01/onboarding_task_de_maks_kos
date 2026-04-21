@@ -23,12 +23,6 @@ pubsub_topics = [
   "mk-br-sales-dlt"
 ]
 
-auto_dq_tables = [
-  "dim_products",
-  "dim_employee",
-  "dim_stores"
-]
-
 gs_products_path = "gs://syn-onboard-product-prod/*.csv"
 
 gs_stores_paths = [

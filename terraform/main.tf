@@ -45,10 +45,3 @@ module "workflows" {
   service_account = module.iam.workflow_sa_email
   workflow_source = var.workflow_source_path
 }
-
-module "dataplex" {
-  source         = "./modules/dataplex"
-  project_id     = var.project_id
-  auto_dq_tables = var.auto_dq_tables
-  region         = var.region
-}
