@@ -96,24 +96,24 @@ jobs:
       - name: Build & Push Ingestion Image
         run: |
           gcloud builds submit cloude_run_service/ \
-            --tag ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/onboarding-repo/ingestion-service:${{ github.sha }}
+            --tag ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/mk-docker-repo/ingestion-service:${{ github.sha }}
 
       - name: Deploy Ingestion to Cloud Run
         run: |
           gcloud run deploy mk-consumer-service \
-            --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/onboarding-repo/ingestion-service:${{ github.sha }} \
+            --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/mk-docker-repo/ingestion-service:${{ github.sha }} \
             --region ${{ env.REGION }} \
             --platform managed
 
       - name: Build & Push DBT Image
         run: |
           gcloud builds submit dbt/ \
-            --tag ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/onboarding-repo/dbt-job:${{ github.sha }}
+            --tag ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/mk-docker-repo/dbt-job:${{ github.sha }}
 
       - name: Update DBT Job Image
         run: |
           gcloud run jobs update mk-dbt-medallion-job \
-            --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/onboarding-repo/dbt-job:${{ github.sha }} \
+            --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/mk-docker-repo/dbt-job:${{ github.sha }} \
             --region ${{ env.REGION }}
 
       - name: Create Dataplex Data Quality Scans

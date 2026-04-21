@@ -78,6 +78,21 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
     --member="serviceAccount:${GH_SA}" \
     --role="roles/storage.objectViewer"
 
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:${GH_SA}" \
+    --role="roles/serviceusage.serviceUsageConsumer"
+
+# Grant Cloud Build Editor
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:${GH_SA}" \
+    --role="roles/cloudbuild.builds.editor"
+
+# Grant Storage Object Admin (to upload the source code)
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:${GH_SA}" \
+    --role="roles/storage.objectAdmin"
+
 # Allow the GitHub Repo to Impersonate the SA
 # Get the full Workload Identity Pool ID
 export WORKLOAD_IDENTITY_POOL_ID=$(gcloud iam workload-identity-pools describe "${POOL_NAME}" \
