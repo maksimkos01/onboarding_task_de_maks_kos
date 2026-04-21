@@ -1,5 +1,6 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from typing import List, Optional
+
 
 # US payload models
 class USAddress(BaseModel):
@@ -7,8 +8,10 @@ class USAddress(BaseModel):
     city: str
     address: str
 
+
 class USContact(BaseModel):
     phone_number: str
+
 
 class USRegisteredCustomer(BaseModel):
     registered_customer_id: str
@@ -20,22 +23,27 @@ class USRegisteredCustomer(BaseModel):
     contact: USContact
     referred_by: Optional[str] = None
 
+
 class USModelPurchased(BaseModel):
     line_num: int
     model: str
     model_price: float
 
+
 class USCardInformation(BaseModel):
     card_number: str
     card_expires: str
+
 
 class USTotal(BaseModel):
     payment: float
     currency: str
 
+
 class USPayment(BaseModel):
     card_information: USCardInformation
     total: USTotal
+
 
 class USSalesTransaction(BaseModel):
     transaction_id: str
@@ -46,15 +54,18 @@ class USSalesTransaction(BaseModel):
     models_purchased: List[USModelPurchased]
     payment: USPayment
 
+
 # Brazil payload models
 class BRLocalizacao(BaseModel):
     ClienteID: int
     ClienteNome: str
     Localizacao: str
 
+
 class BRCartao(BaseModel):
     Numero: str
     DataDeValidade: str
+
 
 class BRCabecalho(BaseModel):
     TransacaoID: int
@@ -64,13 +75,16 @@ class BRCabecalho(BaseModel):
     Cliente: Optional[BRLocalizacao] = None
     Cartao: BRCartao
 
+
 class BRModelo(BaseModel):
     ModeloID: str
     Preco: float
 
+
 class BRSalesElement(BaseModel):
     Cabecalho: BRCabecalho
     Modelo: BRModelo
+
 
 # The Brazilian payload
 class BRSalesMessage(BaseModel):

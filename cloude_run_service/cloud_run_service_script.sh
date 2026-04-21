@@ -34,7 +34,7 @@ gcloud artifacts repositories create mk-kafka-repo \
     --project=$PROJECT_ID
 
 #build the image
-gcloud builds submit --tag europe-west1-docker.pkg.dev/syntio-onboarding-prod/mk-kafka-repo/kafka-consumer:v2
+gcloud builds submit --tag europe-west1-docker.pkg.dev/syntio-onboarding-prod/mk-kafka-repo/kafka-consumer:v2 #PAZI
 
 # Deploy the service to Cloud Run
 gcloud run deploy mk-kafka-consumer-to-pubsub \
