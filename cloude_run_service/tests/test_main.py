@@ -1,7 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
 
-# --- CRITICAL: PATCH BEFORE IMPORTING APP ---
 with patch("google.cloud.pubsub_v1.PublisherClient"), \
      patch("google.cloud.secretmanager.SecretManagerServiceClient"), \
      patch("confluent_kafka.Consumer"):
@@ -13,22 +12,13 @@ client = TestClient(app)
 
 @pytest.fixture
 def mock_kafka_consumer():
+    # Patch the actual path inside main.py
     with patch("cloude_run_service.main.Consumer") as mock:
         yield mock
 
 @pytest.fixture
 def mock_pubsub_publisher():
-    with patch("cloude_run_service.main.publisher") as mock:
-        yield mock
-
-@pytest.fixture
-def mock_kafka_consumer():
-    with patch("cloude_run_service.main.Consumer") as mock:
-        yield mock
-
-
-@pytest.fixture
-def mock_pubsub_publisher():
+    # Patch the actual path inside main.py
     with patch("cloude_run_service.main.publisher") as mock:
         yield mock
 
