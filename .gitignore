@@ -17,5 +17,4 @@ dbt-key.json
 *.tfstate
 *.tfstate.backup
 .terraform.lock.hcl
-*.tfvars
 *.tfvars.json
