@@ -1,10 +1,11 @@
 import pytest
-from fastapi.testclient import TestClient
 from unittest.mock import patch, MagicMock
-from cloude_run_service.main import app
+
+with patch("google.cloud.pubsub_v1.PublisherClient"):
+    from cloude_run_service.main import app
+    from fastapi.testclient import TestClient
 
 client = TestClient(app)
-
 
 @pytest.fixture
 def mock_kafka_consumer():
