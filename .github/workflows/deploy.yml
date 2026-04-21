@@ -1,6 +1,19 @@
 name: CI/CD Pipeline
 on: 
   workflow_dispatch:
+    inputs:
+      run_python_ci:
+        description: 'Run Python CI (Lint & Test)?'
+        type: boolean
+        default: true
+      run_infrastructure:
+        description: 'Run Terraform Infrastructure?'
+        type: boolean
+        default: false
+      run_deployment:
+        description: 'Run Build & Deploy (Cloud Run)?'
+        type: boolean
+        default: false
 
 env:
   PROJECT_ID: ${{ vars.PROD_GCP_PROJECT_ID }}
@@ -10,6 +23,7 @@ env:
 
 jobs:
   python-ci:
+    if: ${{ inputs.run_python_ci == true }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -35,6 +49,7 @@ jobs:
         run: pytest cloude_run_service/
 
   infrastructure:
+    if: ${{ always() && inputs.run_infrastructure == true && (needs.python-ci.result == 'success' || needs.python-ci.result == 'skipped') }}
     needs: [python-ci]
     runs-on: ubuntu-latest
     permissions:
@@ -60,6 +75,7 @@ jobs:
           terraform apply -auto-approve -input=false
 
   build-and-deploy:
+    if: ${{ always() && inputs.run_deployment == true && (needs.infrastructure.result == 'success' || needs.infrastructure.result == 'skipped') }}
     needs: [infrastructure]
     runs-on: ubuntu-latest
     permissions:
