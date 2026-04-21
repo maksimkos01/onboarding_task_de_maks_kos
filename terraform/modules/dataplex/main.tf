@@ -3,7 +3,7 @@ resource "google_dataplex_datascan" "scans" {
 
   location     = var.region
   project      = var.project_id
-  data_scan_id = "mk-${each.key}-dqc-scan"
+  data_scan_id = "mk-${replace(each.key, "_", "-")}-dqc-scan"
 
   data {
     resource = "//bigquery.googleapis.com/projects/${var.project_id}/datasets/mk_gold/tables/${each.value}"

@@ -52,11 +52,3 @@ module "dataplex" {
   auto_dq_tables = var.auto_dq_tables
   region         = var.region
 }
-
-module "secrets" {
-  source        = "./modules/secrets"
-  project_id    = var.project_id
-  user_secret   = var.user_secret
-  user_password = var.user_password
-
-}

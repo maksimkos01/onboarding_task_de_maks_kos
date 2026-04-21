@@ -67,11 +67,3 @@ variable "artifact_repo_name" {
 variable "workflow_source_path" {
   type = string
 }
-
-variable "user_secret" {
-  type = string
-}
-
-variable "user_password" {
-  type = string
-}

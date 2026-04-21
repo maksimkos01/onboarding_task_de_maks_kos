@@ -67,17 +67,17 @@ resource "google_project_iam_member" "workflow_roles" {
 resource "google_service_account_iam_member" "kafka_sa_user" {
   service_account_id = google_service_account.kafka_sa.name
   role               = "roles/iam.serviceAccountUser"
-  member             = "group:${var.admin_group_email}"
+  member             = "user:${var.admin_group_email}"
 }
 
 resource "google_service_account_iam_member" "dbt_sa_user" {
   service_account_id = google_service_account.dbt_sa.name
   role               = "roles/iam.serviceAccountUser"
-  member             = "group:${var.admin_group_email}"
+  member             = "user:${var.admin_group_email}"
 }
 
 resource "google_service_account_iam_member" "workflow_sa_user" {
   service_account_id = google_service_account.workflow_sa.name
   role               = "roles/iam.serviceAccountUser"
-  member             = "group:${var.admin_group_email}"
+  member             = "user:${var.admin_group_email}"
 }

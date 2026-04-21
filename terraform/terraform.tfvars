@@ -37,6 +37,3 @@ gs_stores_paths = [
 ]
 
 workflow_source_path = "../workflow/pipeline-workflow.yaml"
-
-user_secret   = "mk-user-secret"
-user_password = "mk-user-password"
