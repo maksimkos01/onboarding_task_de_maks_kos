@@ -1,0 +1,156 @@
+[
+  {
+    "name": "transaction_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "transaction_time",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "store",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "registered_customer",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+      {
+        "name": "registered_customer_id",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "first_name",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "last_name",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "gender",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "registered_since",
+        "type": "DATE",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "address",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+          {
+            "name": "country_code",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          },
+          {
+            "name": "city",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          },
+          {
+            "name": "address",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          }
+        ]
+      },
+      {
+        "name": "contact",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+          {
+            "name": "phone_number",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          }
+        ]
+      },
+      {
+        "name": "referred_by",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "employee",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "models_purchased",
+    "type": "RECORD",
+    "mode": "REPEATED",
+    "fields": [
+      {
+        "name": "line_num",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "model",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "model_price",
+        "type": "NUMERIC",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "payment",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+      {
+        "name": "card_information",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+          {
+            "name": "card_number",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          },
+          {
+            "name": "card_expires",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          }
+        ]
+      },
+      {
+        "name": "total",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+          {
+            "name": "payment",
+            "type": "NUMERIC",
+            "mode": "NULLABLE"
+          },
+          {
+            "name": "currency",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          }
+        ]
+      }
+    ]
+  }
+]
