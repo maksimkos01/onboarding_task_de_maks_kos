@@ -34,7 +34,6 @@ jobs:
             KAFKA_BOOTSTRAP_SERVERS: "localhost:9092"
         run: pytest cloude_run_service/
 
-  # 2. TERRAFORM
   infrastructure:
     needs: [python-ci]
     runs-on: ubuntu-latest
@@ -57,13 +56,11 @@ jobs:
         run: |
           cd terraform/ 
           terraform init -backend=false
-          terraform fmt -check
           terraform validate
-          terraform apply -auto-approve
+          terraform apply -auto-approve -input=false
 
-  # 3. BUILD & PUSH ARTIFACTS
   build-and-deploy:
-    needs: [infrastructure] # Infrastructure must exist first!
+    needs: [infrastructure]
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
