@@ -68,7 +68,7 @@ class BRCartao(BaseModel):
 
 
 class BRCabecalho(BaseModel):
-    TransacaoID: int
+    TransacaoID: str
     Moeda: str
     TransacaoTempo: str
     LojaID: str
