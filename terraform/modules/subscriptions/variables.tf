@@ -1,0 +1,9 @@
+variable "project_id" { type = string }
+variable "us_topic_name" { type = string }
+variable "br_topic_name" { type = string }
+variable "us_dlt_name" { type = string }
+variable "br_dlt_name" { type = string }
+variable "us_table_id" { type = string }
+variable "br_table_id" { type = string }
+variable "bronze_dataset" { type = string }
+variable "service_account_email" { type = string }

@@ -62,3 +62,43 @@ variable "artifact_repo_name" {
 variable "workflow_source_path" {
   type = string
 }
+
+variable "pubsub_sub_service_account" {
+  type        = string
+  description = "ID for the Pub/Sub Subscription SA"
+}
+
+variable "us_topic_name" {
+  type        = string
+  description = "The Pub/Sub topic for US sales"
+}
+
+variable "br_topic_name" {
+  type        = string
+  description = "The Pub/Sub topic for BR sales"
+}
+
+variable "us_dlt_name" {
+  type        = string
+  description = "The Dead Letter Topic for US sales"
+}
+
+variable "br_dlt_name" {
+  type        = string
+  description = "The Dead Letter Topic for BR sales"
+}
+
+variable "bronze_dataset" {
+  type        = string
+  description = "The Bronze BigQuery dataset name"
+}
+
+variable "us_table_id" {
+  type        = string
+  description = "The BigQuery table ID for US sales"
+}
+
+variable "br_table_id" {
+  type        = string
+  description = "The BigQuery table ID for BR sales"
+}

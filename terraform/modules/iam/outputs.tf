@@ -10,3 +10,8 @@ output "dbt_sa_email" {
 output "workflow_sa_email" {
   value = google_service_account.workflow_sa.email
 }
+
+output "pubsub_sub_sa_email" {
+  value       = google_service_account.pubsub_sub_sa.email
+  description = "The email of the Pub/Sub Subscription service account"
+}

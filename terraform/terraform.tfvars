@@ -31,3 +31,13 @@ gs_stores_paths = [
 ]
 
 workflow_source_path = "../workflow/pipeline-workflow.yaml"
+
+pubsub_sub_service_account = "mk-pubsub-sub-sa"
+
+us_topic_name = "mk-us-sales-topic"
+br_topic_name = "mk-br-sales-topic"
+us_dlt_name   = "mk-us-sales-dlt"
+br_dlt_name   = "mk-br-sales-dlt"
+bronze_dataset = "mk_bronze"
+us_table_id    = "us_sales"
+br_table_id    = "br_sales"
