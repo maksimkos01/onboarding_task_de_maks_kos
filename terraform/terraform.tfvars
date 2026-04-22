@@ -8,7 +8,7 @@ admin_group_email = "maksim.kos@legacy.syntio.net"
 kafka_ingestion_service_account = "mk-kafka-sa"
 dbt_service_account             = "mk-dbt-sa"
 workflow_service_account        = "mk-workflow-sa"
-
+pubsub_sub_service_account = "mk-pubsub-sa"
 
 medallion_datasets = [
   "mk_bronze",
@@ -32,7 +32,6 @@ gs_stores_paths = [
 
 workflow_source_path = "../workflow/pipeline-workflow.yaml"
 
-pubsub_sub_service_account = "mk-pubsub-sub-sa"
 
 us_topic_name = "mk-us-sales-topic"
 br_topic_name = "mk-br-sales-topic"
