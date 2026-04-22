@@ -93,6 +93,14 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
     --member="serviceAccount:${GH_SA}" \
     --role="roles/storage.objectAdmin"
 
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:${GH_SA}" \
+    --role="roles/storage.admin"
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:${GH_SA}" \
+    --role="roles/viewer"
+
 # Allow the GitHub Repo to Impersonate the SA
 # Get the full Workload Identity Pool ID
 export WORKLOAD_IDENTITY_POOL_ID=$(gcloud iam workload-identity-pools describe "${POOL_NAME}" \

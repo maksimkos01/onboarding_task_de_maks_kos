@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+confluent-kafka
+google-cloud-secret-manager
+google-cloud-pubsub
+pydantic
+google-cloud-bigquery
+google-cloud-storage
+dbt-bigquery
+pytest
+httpx
+ruff
