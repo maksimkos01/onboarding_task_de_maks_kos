@@ -127,9 +127,3 @@ jobs:
           gcloud run jobs update mk-dbt-medallion-job \
             --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/mk-docker-repo/dbt-job:${{ github.sha }} \
             --region ${{ env.REGION }}
-
-      - name: Create Dataplex Data Quality Scans
-        working-directory: auto_dq
-        run: |
-          chmod +x create_scans.sh
-          ./create_scans.sh
