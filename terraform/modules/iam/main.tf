@@ -55,7 +55,9 @@ resource "google_service_account" "workflow_sa" {
 resource "google_project_iam_member" "workflow_roles" {
   for_each = toset([
     "roles/workflows.admin",
-    "roles/artifactregistry.writer"
+    "roles/artifactregistry.writer",
+    "roles/run.invoker",
+    "roles/run.admin"
   ])
 
   project = var.project_id

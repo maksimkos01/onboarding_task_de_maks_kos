@@ -33,3 +33,19 @@ resource "google_pubsub_subscription" "br_sales_bq_sub" {
     max_delivery_attempts = 5
   }
 }
+
+# Subscription to catch and hold messages sent to the US Dead Letter Topic
+resource "google_pubsub_subscription" "us_dlt_sub" {
+  name    = "mk-us-sales-dlt-sub"
+  project = var.project_id
+  topic   = "projects/${var.project_id}/topics/${var.us_dlt_name}"
+  message_retention_duration = "604800s" 
+}
+
+# Subscription to catch and hold messages sent to the BR Dead Letter Topic
+resource "google_pubsub_subscription" "br_dlt_sub" {
+  name    = "mk-br-sales-dlt-sub"
+  project = var.project_id
+  topic   = "projects/${var.project_id}/topics/${var.br_dlt_name}"
+  message_retention_duration = "604800s" 
+}
