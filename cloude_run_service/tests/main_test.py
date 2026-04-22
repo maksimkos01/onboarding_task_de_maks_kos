@@ -26,7 +26,7 @@ def mock_consumer_class():
 @pytest.fixture
 def mock_get_secret():
     """Fixture to mock Secret Manager calls in config.py."""
-    with patch("cloude_run_service.config.Config.get_secret") as mocked_secret:
+    with patch("config.Config.get_secret") as mocked_secret:
         mocked_secret.return_value = "mocked-secret-value"
         yield mocked_secret
 
