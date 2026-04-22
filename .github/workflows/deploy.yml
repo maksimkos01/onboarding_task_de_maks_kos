@@ -131,5 +131,5 @@ jobs:
       - name: Create Dataplex Data Quality Scans
         working-directory: auto_dq
         run: |
-          chmod +x auto_dq/create_scans.sh
-          ./auto_dq/create_scans.sh
+          chmod +x create_scans.sh
+          ./create_scans.sh
