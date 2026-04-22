@@ -4,7 +4,7 @@
     "type": "RECORD",
     "mode": "NULLABLE",
     "fields": [
-      { "name": "TransacaoID", "type": "INTEGER", "mode": "NULLABLE" },
+      { "name": "TransacaoID", "type": "STRING", "mode": "NULLABLE" }, 
       { "name": "Moeda", "type": "STRING", "mode": "NULLABLE" },
       { "name": "TransacaoTempo", "type": "TIMESTAMP", "mode": "NULLABLE" },
       { "name": "LojaID", "type": "STRING", "mode": "NULLABLE" },

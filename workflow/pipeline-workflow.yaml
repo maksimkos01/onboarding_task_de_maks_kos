@@ -74,25 +74,7 @@ main:
               switch:
                 - condition: ${"error" in operation}
                   next: fail_on_job_error
-              next: run_dataplex_scans
-
-    # 5. Run DQ Scans 
-    - run_dataplex_scans:
-            parallel:
-              for:
-                value: scan_id
-                in: ${dq_scan_ids}
-                steps:
-                  - trigger_scan:
-                      call: http.post
-                      args:
-                        url: ${"https://dataplex.googleapis.com/v1/projects/" + project_id + "/locations/" + region + "/dataScans/" + scan_id + ":run"}
-                        auth:
-                          type: OAuth2
-                      result: scan_result
-            next: completion_success
-      
-
+              next: completion_success
 
     # Error Handling for dbt Job
     - fail_on_job_error:
