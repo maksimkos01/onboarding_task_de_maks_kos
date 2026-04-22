@@ -95,8 +95,14 @@ jobs:
 
       - name: Build & Push Ingestion Image
         run: |
-          gcloud builds submit cloude_run_service/ \
-            --tag ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/mk-docker-repo/ingestion-service:${{ github.sha }}
+          IMAGE_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/mk-docker-repo/ingestion-service:${{ github.sha }}"
+                
+          if gcloud artifacts docker images describe "$IMAGE_TAG" > /dev/null 2>&1; then
+              echo "Image $IMAGE_TAG already exists. Skipping build."
+          else
+              echo "Image $IMAGE_TAG not found. Proceeding with build..."
+              gcloud builds submit cloude_run_service/ --tag "$IMAGE_TAG"
+          fi
 
       - name: Deploy Ingestion to Cloud Run
         run: |
@@ -107,8 +113,14 @@ jobs:
 
       - name: Build & Push DBT Image
         run: |
-          gcloud builds submit dbt/ \
-            --tag ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/mk-docker-repo/dbt-job:${{ github.sha }}
+          DBT_IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/mk-docker-repo/dbt-job:${{ github.sha }}"
+                
+          if gcloud artifacts docker images describe "$DBT_IMAGE" > /dev/null 2>&1; then
+              echo "DBT Image $DBT_IMAGE already exists. Skipping build."
+          else
+            echo "DBT Image $DBT_IMAGE not found. Starting Cloud Build..."
+            gcloud builds submit dbt/ --tag "$DBT_IMAGE"
+          fi
 
       - name: Update DBT Job Image
         run: |
@@ -117,6 +129,7 @@ jobs:
             --region ${{ env.REGION }}
 
       - name: Create Dataplex Data Quality Scans
+        working-directory: auto_dq
         run: |
           chmod +x auto_dq/create_scans.sh
           ./auto_dq/create_scans.sh
