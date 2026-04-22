@@ -4,8 +4,8 @@ from fastapi import FastAPI, HTTPException
 from confluent_kafka import Consumer, KafkaException
 from google.cloud import pubsub_v1
 
-from cloude_run_service.config import config
-from cloude_run_service.schema import USSalesTransaction, BRSalesElement
+from config import config
+from schema import USSalesTransaction, BRSalesElement
 
 logging.basicConfig(level=logging.INFO)
 
