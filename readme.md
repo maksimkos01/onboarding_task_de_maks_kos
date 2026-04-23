@@ -29,3 +29,23 @@ This directory contains the configuration and automation scripts for Google Clou
 
 ### `terraform/`
 This directory contains the IaC
+
+### `workflow/`
+1. Parallel Data Ingestion
+To optimize performance, the workflow triggers two ingestion processes simultaneously using a parallel block:
+
+- US Branch: Sends an authenticated HTTP POST request to the /consume/us endpoint.
+
+- BR Branch: Sends an authenticated HTTP POST request to the /consume/br endpoint.
+2. Ingestion & Transformation
+- dbt Execution: It triggers a Cloud Run Job named dbt-medallion-job to perform data transformations.
+
+### SETUP
+
+Before triggering the CI/CD pipeline in GitHub Actions, you must establish a secure, keyless authentication bridge between GitHub and Google Cloud Platform (GCP). This is handled by the workload_identity.sh script.
+
+Run the script from root of project
+```
+chmod +x workload_identity.sh
+./workload_identity.sh
+```
