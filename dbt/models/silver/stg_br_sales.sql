@@ -1,4 +1,3 @@
-
 WITH source AS (
     SELECT * FROM {{ source('bronze_layer', 'br_sales') }}
 )

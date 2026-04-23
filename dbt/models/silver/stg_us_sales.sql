@@ -1,5 +1,3 @@
--- models/silver/stg_us_sales.sql
-
 WITH source AS (
     SELECT * FROM {{ source('bronze_layer', 'us_sales') }}
 ),

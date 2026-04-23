@@ -36,7 +36,7 @@ def test_consume_batch_invalid_country():
     assert response.status_code == 400
     assert response.json()["detail"] == "Invalid country code. Use 'us' or 'br'."
 
-def test_consume_batch_no_messages(mock_consumer_class, mock_get_secret):
+def test_consume_batch_no_messages(mock_consumer_class):
     """Tests the behavior when Kafka returns an empty batch."""
     # Setup mock consumer to return an empty list
     mock_instance = mock_consumer_class.return_value
@@ -47,7 +47,7 @@ def test_consume_batch_no_messages(mock_consumer_class, mock_get_secret):
     assert response.json()["message"] == "No new messages to consume."
     assert response.json()["count"] == 0
 
-def test_consume_batch_us_success(mock_consumer_class, mock_publisher, mock_get_secret):
+def test_consume_batch_us_success(mock_consumer_class, mock_publisher):
     """Tests successful processing and publishing of a US sales record."""
     mock_cons_instance = mock_consumer_class.return_value
     
@@ -79,11 +79,10 @@ def test_consume_batch_us_success(mock_consumer_class, mock_publisher, mock_get_
     assert response.json()["processed_count"] == 1
     assert mock_publisher.publish.called
 
-def test_consume_batch_validation_failure_routes_to_dlt(mock_consumer_class, mock_publisher, mock_get_secret):
+def test_consume_batch_validation_failure_routes_to_dlt(mock_consumer_class, mock_publisher):
     """Tests that malformed data is routed to the Dead Letter Topic (DLT)."""
     mock_cons_instance = mock_consumer_class.return_value
     
-    # Message missing required fields (causes Pydantic error)
     mock_msg = MagicMock()
     mock_msg.error.return_value = None
     mock_msg.offset.return_value = 500
@@ -95,5 +94,4 @@ def test_consume_batch_validation_failure_routes_to_dlt(mock_consumer_class, moc
     
     assert response.status_code == 200
     assert response.json()["routed_to_dlt_count"] == 1
-    # Verify it attempted to publish to the DLT path
     assert mock_publisher.publish.called
